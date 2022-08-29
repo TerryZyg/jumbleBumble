@@ -13,6 +13,8 @@ for (let i = 0; i < jumble.length; i++){
     }
 }
 
+console.log("\npossible words:")
+
 fs.readFile("words.json", function(err, data){
     if (err) throw err;
 
@@ -22,20 +24,21 @@ fs.readFile("words.json", function(err, data){
         if (err) throw err;
     
         const range = JSON.parse(data)['0'];
+
+        var res = ""
           
         for (let i = 0; i < letters.length; i++){
 
             for (let n = range[letters[i]+'-st']; n < range[letters[i]+'-ed']; n++){
                 if (words[n].length == jumble.length){
+                    let l = Array.from(words[n])
 
                     for (let a = 0; a < jumble.length; a++){
-                        let l = Array.from(words[n])
-
                         if (l.includes(jumble[a])){
                             delete l[l.indexOf(jumble[a])]
 
                             if(a == jumble.length-1){
-                                console.log(words[n])
+                                res = res + words[n] + '\n'
                             }
 
                         }else{
@@ -44,6 +47,11 @@ fs.readFile("words.json", function(err, data){
                     }                 
                 }
             }
-        } 
+        }
+        if(res){
+            console.log(res)
+        }else{
+            console.log("there are no possible results for the given letters")
+        }
     });
 });
